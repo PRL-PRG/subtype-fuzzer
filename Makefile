@@ -1,23 +1,12 @@
-.PHONY: rj
+.PHONY: all fuzzer  run get-stack clean clean-all
 
-JULIA_CMD=julia-dev-raw --depwarn=no
-RJ=stack exec rj
-SRC=src
+all: fuzzer
 
-all: rj
-
-rj:
+fuzzer:
 	stack build
 
-# > out.txt && cat out.txt
-run: rj
-	$(RJ) | $(JULIA_CMD) -L $(SRC)/check.jl -e 'main()'
-
-runin:
-	$(RJ) > out.txt
-
-runout:
-	cat out.txt | $(JULIA_CMD) -L $(SRC)check.jl -e 'main()'
+run:
+	stack exec fuzzer
 
 get-stack:
 	curl -sSL https://get.haskellstack.org/ | sh
@@ -27,4 +16,3 @@ clean:
 
 clean-all: clean
 	stack clean --full
-
